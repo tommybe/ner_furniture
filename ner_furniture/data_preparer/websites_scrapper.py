@@ -1,16 +1,18 @@
-import requests
-from bs4 import BeautifulSoup
-import logging
-import os
-from typing import NoReturn, List
 import json
+import logging
+from typing import List
 
+import requests
 import trafilatura
+from bs4 import BeautifulSoup
 from tqdm import tqdm
-from trafilatura.sitemaps import sitemap_search
+import re
+import urllib.request
+from urllib.parse import urljoin
 
 HEADERS = {
-    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'
+}
 
 
 class Crawler:
@@ -21,15 +23,24 @@ class Crawler:
 
     def run(self):
         for url in tqdm(self.basic_urls):
-            sitemap_urls = sitemap_search(url)
+            try:
+                all_furnitures_urls = self._get_all_linked_furnitures_websites(url)
+                self._single_website_run(all_furnitures_urls, url)
+            except:
+                logging.error(f'Website {url} doesn\'t work')
+        return self.results
 
-
-            logging.info(f"Scrapping {url} and {len(sitemap_urls)} connected sites.")
-            self._single_website_run(all_urls, url)
-
-    def _get_all_linked_websites(self, url: str):
-        for link in soup.find_all('a'):
-            print(link.get('href'))
+    def _get_all_linked_furnitures_websites(self, url: str):
+        all_furnitures_urls = [url]
+        r = urllib.request.urlopen(url).read()
+        soup = BeautifulSoup(r, 'lxml')
+        all_urls = soup.find_all('a')
+        for connected_url in all_urls:
+            clear_url = urljoin(url, connected_url.get('href'))
+            if any([furniture_type in clear_url for furniture_type in self.furnitures_types]):
+                all_furnitures_urls.append(clear_url)
+        logging.debug(f'{len(all_furnitures_urls)} of {len(all_urls)} was about furnitures')
+        return all_furnitures_urls
 
     def _single_website_run(self, all_inner_websites: List[str], website: str):
         inner_results = {}
@@ -40,12 +51,13 @@ class Crawler:
                 del scrapper
             except:
                 logging.error(f'Error during scraping {inner_website}.')
-        self.results[website] = inner_results
+        if inner_results:
+            self.results[website] = inner_results
         self._dump()
 
     # TEMPORARY
     def _dump(self):
-        with open('/home/inquisitor/ner_furniture/texts3.json', "w") as file:
+        with open('/home/inquisitor/ner_furniture/texts.json', "w") as file:
             json.dump(self.results, file)
 
 
@@ -57,8 +69,13 @@ class Scrapper:
     def get_title(self) -> str:
         r = requests.get(self.url, headers=HEADERS)
         soup = BeautifulSoup(r.content)
-        return soup.find('title').string.strip()
+        website_title = self.remove_multiple_whitespaces(soup.find('title').string)
+        return website_title
 
     def get_content(self) -> str:
         downloaded = trafilatura.fetch_url(self.url)
-        return trafilatura.extract(downloaded, include_comments=False).strip()
+        content = self.remove_multiple_whitespaces(trafilatura.extract(downloaded, include_comments=False))
+        return content
+
+    def remove_multiple_whitespaces(self, text: str):
+        return re.sub(r"\s+", " ", text)
