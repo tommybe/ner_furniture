@@ -1,6 +1,4 @@
-LABELS_LIST = ["0", "B-product", "I-product"]
-LABELS_IDS = [0, 1, 2]
-
+from ner_furniture.commons import LABELS_IDS
 
 class WordLabeler:
 

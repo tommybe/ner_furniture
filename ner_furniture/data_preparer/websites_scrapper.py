@@ -57,7 +57,7 @@ class Crawler:
 
     # TEMPORARY
     def _dump(self):
-        with open('/home/inquisitor/ner_furniture/texts.json', "w") as file:
+        with open('/home/inquisitor/ner_furniture/texts_150.json', "w") as file:
             json.dump(self.results, file)
 
 
