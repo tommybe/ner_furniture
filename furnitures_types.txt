@@ -1,14 +1,14 @@
 chair
-chaise_longue
+chaise longue
 fauteuil
 ottoman
 recliner
 stool
-bar_stool
+bar stool
 footstool
 ottoman
 tuffet
-fainting_couch
+fainting couch
 poufy
 bench
 couch
@@ -18,20 +18,20 @@ canapé
 davenport
 klinai
 divan
-love_seat
+love seat
 chesterfield
 bed
-billiard_table
-celestial_globe
-chess_table
-entertainment_center
+billiard table
+celestial globe
+chess table
+entertainment center
 gramophone
 hi-fi
 jukebox
-pinball_machine
+pinball machine
 radiogram
-home_bar
-radio_receiver
+home bar
+radio receiver
 piano
 tv
 countertop
@@ -40,63 +40,63 @@ desk
 lowboy
 kotatsu
 korsi
-monks_bench
+monks bench
 soban
 table
 Washstand
 Workbench
-bakers_rack
+bakers rack
 bookcase
 cabinetry
-bathroom_cabinet
+bathroom cabinet
 chifforobe
 closet
 credenza
 cupboard
-curio_cabinet
+curio cabinet
 cabinet
 hutch
 pantry
-pie_safe
-stipo_a_bambocci
+pie safe
+stipo a bambocci
 sideboard
-chest_of_drawers
+chest of drawers
 dresser
 chest
 cellarette
-hope_chest
-coat_rack
+hope chest
+coat rack
 drawer
-hall_tree
+hall tree
 hatstand
-bar_cabinet
-filing_cabinet
-floating_shelf
+bar cabinet
+filing cabinet
+floating shelf
 nightstand
 ottoman
-plan_chest
-plant_stand
+plan chest
+plant stand
 shelving
 sideboard
 buffet
-umbrella_stand
+umbrella stand
 Wardrobe
 armoire
-Wine_rack
+Wine rack
 commode
-bedroom_set
+bedroom set
 dinette
-dining_set
-Vanity_set
-portable_lamps
-patio_set
-clothes_valet
+dining set
+Vanity set
+portable lamps
+patio set
+clothes valet
 credenza
 divider
 shōji
 partition
-folding_screen
-garden_furniture
+folding screen
+garden furniture
 lamp
 taboret
 tatami

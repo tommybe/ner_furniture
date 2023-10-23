@@ -16,28 +16,28 @@ logging.basicConfig(level=logging.INFO)
 
 PATH_TO_FURNITURES_TYPES = '/home/inquisitor/ner_furniture/furnitures_types.txt'
 WEBSITES_SAMPLE_SIZE = 150
+TOKENS_DATA_FILENAME = 'labeled_tokens_dataset.json'
 
 
 def run_vdb_creator(list_of_websites: List[str], furnitures_types: List[str]) -> NoReturn:
     # websites_content = Crawler(list_of_websites, furnitures_types).run()
 
     #temp
-    f = open('/home/inquisitor/ner_furniture/texts_test.json')
+    f = open('/home/inquisitor/ner_furniture/texts.json')
     websites_content = json.load(f)
-
-
     websites_content_by_words = split_content_into_words(websites_content)
-    content_word_tokens = WordTokenizer.tokenize(websites_content_by_words)
-    websites_content_by_words_labels = WordLabeler().label_loop(websites_content_by_words)
 
+    logging.info('Preparing tokens and labels on words')
+    word_tokenizer = WordTokenizer(websites_content_by_words)
+    content_word_tokens = word_tokenizer.tokenize()
+    content_word_labels = word_tokenizer.labelize()
 
-    #TODO - add label to train test split
-    train_websites, test_websites = split_websites_on_train_test(websites_content_by_words)
+    logging.info('Preparing tokens and labels on subwords')
+    subword_tokenizer = WordPieceTokenizer()
+    content_subword_tokens = subword_tokenizer.tokenize(content_word_tokens)
+    content_subword_labels = subword_tokenizer.labelize(content_subword_tokens,content_word_labels)
 
-    train_tokens = BasicTokenizer().tokenize(train_websites)
-    test_tokens = BasicTokenizer().tokenize(test_websites)
-
-    print('!!!')
+    return {'tokens':content_subword_tokens, 'labels':content_subword_labels}
 
 
 
@@ -54,7 +54,11 @@ def run(path_to_csv_with_urls: str) -> NoReturn:
     furnitures_types = file.read().split("\n")
     file.close()
 
-    run_vdb_creator(sample_of_websites, furnitures_types)
+    token_data = run_vdb_creator(sample_of_websites, furnitures_types)
+    token_data_path = os.path.join(os.path.dirname(path_to_csv_with_urls),TOKENS_DATA_FILENAME)
+    logging.info(f'Saving token dataset to {token_data_path}')
+    with open(token_data_path, "w") as f:
+        f.write(json.dumps(token_data))
 
 
 def main():
