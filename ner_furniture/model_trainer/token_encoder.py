@@ -30,7 +30,10 @@ class TokenEncoder:
                     adjusted_label_ids.append(existing_label_ids)
                     prev_word_id = word_id
                 else:
-                    adjusted_label_ids.append(existing_label_ids)
+                    if label_only_first_word:
+                        adjusted_label_ids.append(-100)
+                    else:
+                        adjusted_label_ids.append(existing_label_ids)
 
             total_adjusted_labels.append(adjusted_label_ids)
         return total_adjusted_labels

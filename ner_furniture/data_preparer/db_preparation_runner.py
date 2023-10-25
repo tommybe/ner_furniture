@@ -8,7 +8,7 @@ import json
 import click
 
 from ner_furniture.data_preparer.websites_scrapper import Crawler
-from ner_furniture.data_preparer.tokenizer import WordTokenizer, WordPieceTokenizer
+from ner_furniture.data_preparer.words_splitter import WordSplitter
 from ner_furniture.commons import split_content_into_sentences
 
 logging.basicConfig(level=logging.INFO)
@@ -27,20 +27,14 @@ def run_vdb_creator(list_of_websites: List[str], furnitures_types: List[str]) ->
     websites_content_by_sentences = split_content_into_sentences(websites_content)
 
     logging.info('Preparing tokens and labels on sentences')
-    word_tokenizer = WordTokenizer(websites_content_by_sentences)
-    content_word_tokens = word_tokenizer.tokenize()
-    content_word_labels = word_tokenizer.labelize()
+    word_tokenizer = WordSplitter(websites_content_by_sentences)
+    content_words, content_word_labels = word_tokenizer.run()
 
-    # logging.info('Preparing tokens and labels on subwords')
-    # subword_tokenizer = WordPieceTokenizer()
-    # content_subword_tokens = subword_tokenizer.tokenize(content_word_tokens)
-    # content_subword_labels = subword_tokenizer.labelize(content_word_tokens, content_word_labels)
-
-    return {'tokens': content_word_tokens, 'labels': content_word_labels}
+    return {'tokens': content_words, 'labels': content_word_labels}
 
 
-@click.command(help="Script to prepare dataset for NER training")
-@click.option("--path_to_csv_with_urls", type=str, required=True, help="Path to csv file with urls")
+# @click.command(help="Script to prepare dataset for NER training")
+# @click.option("--path_to_csv_with_urls", type=str, required=True, help="Path to csv file with urls")
 def run(path_to_csv_with_urls: str) -> NoReturn:
     file = open(path_to_csv_with_urls, "r")
     all_websites = [i[0] for i in list(csv.reader(file, delimiter=","))]
@@ -63,5 +57,5 @@ def main():
 
 
 if __name__ == "__main__":
-    run()
-    #path_to_csv_with_urls='/home/inquisitor/ner_furniture/furniture_stores_pages.csv'
+    run(path_to_csv_with_urls='/home/inquisitor/ner_furniture/furniture_stores_pages.csv')
+    #
