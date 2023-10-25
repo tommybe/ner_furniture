@@ -3,6 +3,8 @@ from transformers import AutoTokenizer
 from ner_furniture.data_preparer.labelers import WordLabeler, WordPieceLabeler
 from ner_furniture.commons import BERTMODEL, DO_LOWER_CASE
 
+MIN_NO_OF_LETTERS_IN_SENTENCE = 10
+
 
 class WordTokenizer:
     """
@@ -11,9 +13,7 @@ class WordTokenizer:
     """
 
     def __init__(self, websites: dict):
-        self.tokenizer = AutoTokenizer.from_pretrained(BERTMODEL,
-                                                       do_lower_case=DO_LOWER_CASE,
-                                                       return_offsets_mapping=True)
+        self.tokenizer = AutoTokenizer.from_pretrained(BERTMODEL, do_lower_case=DO_LOWER_CASE)
         self.websites = websites
         self.is_split_into_words = False
         self.labeler = WordLabeler()
@@ -29,8 +29,9 @@ class WordTokenizer:
     def _extract_sentences(self, websites: dict) -> list:
         just_sentences = []
         for inner_website in websites.values():
-            for sentences in inner_website.values():
-                just_sentences.extend(sentences)
+            for content in inner_website.values():
+                pos_sentences = [sentence for sentence in content if len(sentence) >= MIN_NO_OF_LETTERS_IN_SENTENCE]
+                just_sentences.extend(pos_sentences)
         return just_sentences
 
 

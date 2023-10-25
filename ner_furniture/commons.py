@@ -9,10 +9,10 @@ TRAIN_VAL_TEST_SHARES = [0.7, 0.2, 0.1]
 LABELS_LIST = ['O', 'B-PRODUCT', 'I-PRODUCT']
 LABELS_IDS = [0, 1, 2]
 
-def split_content_into_words(websites: dict) -> dict:
+def split_content_into_sentences(websites: dict) -> dict:
     for main_website, inner_websites in websites.items():
         for inner_website_name, inner_website_content in inner_websites.items():
-            websites[main_website][inner_website_name] = split('\s', inner_website_content)
+            websites[main_website][inner_website_name] = split('[\n|\.]', inner_website_content)
     return websites
 
 
