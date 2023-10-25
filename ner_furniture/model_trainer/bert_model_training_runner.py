@@ -14,20 +14,25 @@ from ner_furniture.commons import split_tokens_data_on_train_val_test, flatten_t
 logging.basicConfig(level=logging.INFO)
 
 def run_bert_fine_tuning(tokens_data: dict) -> NoReturn:
+    logging.info('Create train, val and test sets')
     train_set, val_set, test_set = split_tokens_data_on_train_val_test(tokens_data)
 
-    train_set = flatten_tokens_data(train_set)
-    val_set = flatten_tokens_data(val_set)
-    test_set = flatten_tokens_data(test_set)
+    # logging.info('Flatten train, val and test sets')
+    # train_set = flatten_tokens_data(train_set)
+    # val_set = flatten_tokens_data(val_set)
+    # test_set = flatten_tokens_data(test_set)
 
+    logging.info('Tokenize train, val and test sets')
     train_set = TokenEncoder().create(train_set)
     val_set = TokenEncoder().create(val_set)
     # test_set['tokens'] = TokenEncoder().create(test_set['tokens'])
 
+    logging.info('Create train, val and test Dataset class')
     train_set = TransformerDataset(train_set)
     val_set = TransformerDataset(val_set)
     # test_set = TransformerDataset(test_set)
 
+    logging.info('Start of model fine-tuning')
     ModelFineTuner().train(train_set, val_set)
 
     print('!!!')
@@ -35,8 +40,8 @@ def run_bert_fine_tuning(tokens_data: dict) -> NoReturn:
 
 
 
-# @click.command(help="Script to fine-tune BERT model for NER problem")
-# @click.option("--path_to_json_tokens_dataset", type=str, required=True, help="Path to json file with tokens and labels")
+@click.command(help="Script to fine-tune BERT model for NER problem")
+@click.option("--path_to_json_tokens_dataset", type=str, required=True, help="Path to json file with tokens and labels")
 def run(path_to_json_tokens_dataset: str) -> NoReturn:
     f = open(path_to_json_tokens_dataset)
     tokens_data = json.load(f)
@@ -52,5 +57,5 @@ def main():
 
 
 if __name__ == "__main__":
-    run(path_to_json_tokens_dataset='/home/inquisitor/ner_furniture/labeled_tokens_dataset.json')
-    #
+    run()
+    #path_to_json_tokens_dataset='/home/inquisitor/ner_furniture/labeled_tokens_dataset.json'

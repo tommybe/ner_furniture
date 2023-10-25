@@ -8,14 +8,14 @@ TRAIN_VAL_TEST_SHARES = [0.7, 0.2, 0.1]
 
 LABELS_LIST = ['O', 'B-PRODUCT', 'I-PRODUCT']
 LABELS_IDS = [0, 1, 2]
-MIN_NO_OF_LETTERS_IN_SENTENCE = 10
-
+MIN_NO_OF_LETTERS_IN_SENTENCE = 8
+MAX_NO_OF_LETTERS_IN_SENTENCE = 256
 
 def split_content_into_sentences(websites: dict) -> dict:
     for main_website, inner_websites in websites.items():
         for inner_website_name, inner_website_content in inner_websites.items():
             all_sentences = split('[\n|\.]', inner_website_content)
-            sentences_with_suff_len = [sentence for sentence in all_sentences if
+            sentences_with_suff_len = [sentence[:MAX_NO_OF_LETTERS_IN_SENTENCE] for sentence in all_sentences if
                                        len(sentence) > MIN_NO_OF_LETTERS_IN_SENTENCE]
             websites[main_website][inner_website_name] = sentences_with_suff_len
     return websites
