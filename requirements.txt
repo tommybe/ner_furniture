@@ -9,3 +9,4 @@ transformers==4.34.1
 torch==2.1.0
 seqeval==1.2.2
 wandb==0.15.12
+flask==3.0.0

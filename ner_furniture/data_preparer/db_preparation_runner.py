@@ -24,11 +24,11 @@ def run_vdb_creator(list_of_websites: List[str], furnitures_types: List[str]) ->
     # temp
     f = open('/home/inquisitor/ner_furniture/texts_150.json')
     websites_content = json.load(f)
+
     websites_content_by_sentences = split_content_into_sentences(websites_content)
 
     logging.info('Preparing tokens and labels on sentences')
-    word_tokenizer = WordSplitter(websites_content_by_sentences)
-    content_words, content_word_labels = word_tokenizer.run()
+    content_words, content_word_labels = WordSplitter().run_on_many(websites_content_by_sentences)
 
     return {'tokens': content_words, 'labels': content_word_labels}
 
@@ -58,4 +58,3 @@ def main():
 
 if __name__ == "__main__":
     run(path_to_csv_with_urls='/home/inquisitor/ner_furniture/furniture_stores_pages.csv')
-    #

@@ -6,7 +6,7 @@ from ner_furniture.model_trainer.evaluation_metrics import compute_metrics
 from ner_furniture.model_trainer.dataset_creator import TransformerDataset
 
 TRAINING_ARGS = TrainingArguments(
-    output_dir="./fine_tune_bert",
+    output_dir="../../fine_tune_bert_models/fine_tune_bert",
     evaluation_strategy="steps",
     per_device_train_batch_size=16,
     per_device_eval_batch_size=64,
@@ -33,3 +33,4 @@ class ModelFineTuner:
             compute_metrics=compute_metrics
         )
         trainer.train()
+        return trainer

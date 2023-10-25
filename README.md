@@ -26,9 +26,13 @@ To run, use click command. Example:
 python path_to/bert_model_training_runner.py
 --path_to_json_tokens_dataset='path to json file with tokens and labels'
 ```
+Additionally, there is Colab notebook with dump to wandb (hard c&paste from classes in model_trainer directory).
 
 ## TODO
 - got to parent site if basic site returns 404
 - remove facebook, twitter, etc from scrapping pages
 - find better way to filter out websites about furnitures (now it is based on furnitures_types.txt)
 - deal with Trainer training_args
+- add analysis of test dataset
+- -stronger use commons.py in ProductExtractor
+- -test model fine-tuned on label_only_first_word=False
