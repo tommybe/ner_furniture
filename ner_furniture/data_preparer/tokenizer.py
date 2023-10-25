@@ -11,7 +11,9 @@ class WordTokenizer:
     """
 
     def __init__(self, websites: dict):
-        self.tokenizer = AutoTokenizer.from_pretrained(BERTMODEL, do_lower_case=DO_LOWER_CASE)
+        self.tokenizer = AutoTokenizer.from_pretrained(BERTMODEL,
+                                                       do_lower_case=DO_LOWER_CASE,
+                                                       return_offsets_mapping=True)
         self.websites = websites
         self.is_split_into_words = False
         self.labeler = WordLabeler()
@@ -47,7 +49,5 @@ class WordPieceTokenizer:
         subword_tokens = [self.tokenizer.tokenize(s, is_split_into_words=self.is_split_into_words) for s in word_tokens]
         return subword_tokens
 
-    def labelize(self, subword_tokens:list, word_labels:list) -> list:
+    def labelize(self, subword_tokens: list, word_labels: list) -> list:
         return self.labeler.label_loop(subword_tokens, word_labels)
-
-

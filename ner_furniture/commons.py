@@ -2,11 +2,11 @@ from re import split
 from typing import Tuple
 
 TRAIN_WEBSITES_SHARE = 0.7
-BERTMODEL = 'bert-base-uncased'  # to check distilbert-base-uncased, https://huggingface.co/docs/transformers/tasks/token_classification
+BERTMODEL = 'distilbert-base-uncased'  # to check bert-base-uncased, https://huggingface.co/docs/transformers/tasks/token_classification
 DO_LOWER_CASE = True
 TRAIN_VAL_TEST_SHARES = [0.7, 0.2, 0.1]
 
-LABELS_LIST = ["0", "B-product", "I-product"]
+LABELS_LIST = ['O', 'B-PRODUCT', 'I-PRODUCT']
 LABELS_IDS = [0, 1, 2]
 
 def split_content_into_words(websites: dict) -> dict:
@@ -23,16 +23,16 @@ def split_tokens_data_on_train_val_test(tokens_data: dict) -> Tuple[dict, dict, 
                     int(no_of_words * (TRAIN_VAL_TEST_SHARES[0] + TRAIN_VAL_TEST_SHARES[0])),
                     no_of_words + 1
                     ]
-    train_set = {'tokens': tokens_data['tokens'][split_points[0], split_points[1]],
-                 'labels': tokens_data['labels'][split_points[0], split_points[1]]}
-    val_set = {'tokens': tokens_data['tokens'][split_points[1], split_points[2]],
-               'labels': tokens_data['labels'][split_points[1], split_points[2]]}
-    test_set = {'tokens': tokens_data['tokens'][split_points[2], split_points[3]],
-                'labels': tokens_data['labels'][split_points[2], split_points[3]]}
+    train_set = {'tokens': tokens_data['tokens'][split_points[0]:split_points[1]],
+                 'labels': tokens_data['labels'][split_points[0]:split_points[1]]}
+    val_set = {'tokens': tokens_data['tokens'][split_points[1]:split_points[2]],
+               'labels': tokens_data['labels'][split_points[1]:split_points[2]]}
+    test_set = {'tokens': tokens_data['tokens'][split_points[2]:split_points[3]],
+                'labels': tokens_data['labels'][split_points[2]:split_points[3]]}
     return train_set, val_set, test_set
 
 
 def flatten_tokens_data(tokens_data: dict) -> dict:
     tokens_data['tokens'] = [subword for word in tokens_data['tokens'] for subword in word]
-    tokens_data['labels'] = [subword for word in tokens_data['labels'] for subword in word]
+    tokens_data['labels'] = [sublabel for label in tokens_data['labels'] for sublabel in label]
     return tokens_data
