@@ -2,14 +2,17 @@ from transformers import AutoTokenizer
 
 from ner_furniture.commons import BERTMODEL, DO_LOWER_CASE
 
-MAX_TOKEN_LENGTH = 64
+MAX_TOKEN_LENGTH = 32
 
 
 class TokenEncoder:
 
     def create(self, tokens_set: dict, label_only_first_word=True):
         tokenizer = AutoTokenizer.from_pretrained(BERTMODEL, do_lower_case=DO_LOWER_CASE)
-        tokens_set['tokens'] = tokenizer(tokens_set['tokens'], padding=True, truncation=True, max_length=64,
+        tokens_set['tokens'] = tokenizer(tokens_set['tokens'],
+                                         padding=True,
+                                         truncation=True,
+                                         max_length=MAX_TOKEN_LENGTH,
                                          is_split_into_words=True)
         tokens_set['labels'] = self._update_labels(tokens_set['tokens'], tokens_set['labels'], label_only_first_word)
         return tokens_set

@@ -1,7 +1,6 @@
 from re import split
 from typing import Tuple
 
-TRAIN_WEBSITES_SHARE = 0.7
 BERTMODEL = 'distilbert-base-uncased'  # to check bert-base-uncased, https://huggingface.co/docs/transformers/tasks/token_classification
 DO_LOWER_CASE = True
 TRAIN_VAL_TEST_SHARES = [0.7, 0.2, 0.1]
