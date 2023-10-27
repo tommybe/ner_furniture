@@ -40,11 +40,8 @@ Additionally, there is Colab notebook with dump to wandb (hard c&paste from clas
 ## product_predictor
 
 Flask server responsible to which fine-tuned model is loaded (models are located in fine_tune_bert_models dir).
-Has 1 endpoint to communicate with the server:
-
-- ```http://<flask_host>:<flask_port>/get_products/<url>``` to get all products from url
-  To start the server, path to model, host (optionally) and port (optionally) have to be passed.
-  To run, use click command. Example:
+To start the server, path to model, host (optionally) and port (optionally) have to be passed.
+To run, use click command. Example:
 
 ```
 python path_to/question_server_runner.py 
@@ -53,7 +50,9 @@ python path_to/question_server_runner.py
 --flask_port=5000
 ``` 
 
-To run, use click command. Example:
+Server has 1 endpoint to communicate with:
+- ```http://<flask_host>:<flask_port>/get_products/<url>``` to get all products from url
+you can use it i.e. in your browser 
 
 ## \#TODO
 

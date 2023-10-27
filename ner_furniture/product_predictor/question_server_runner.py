@@ -1,11 +1,13 @@
-from flask import Flask
-import click
 import logging
-from typing import NoReturn
 from threading import Thread
-from ner_furniture.product_predictor.products_extractor import ProductsExtractor
+from typing import NoReturn
+
+import click
+from flask import Flask
 from transformers import AutoModelForTokenClassification, AutoTokenizer
+
 from ner_furniture.commons import BERTMODEL, DO_LOWER_CASE
+from ner_furniture.product_predictor.products_extractor import ProductsExtractor
 
 flask_app = Flask(__name__)
 
@@ -17,10 +19,8 @@ def run_product_extractor(path_to_bert_model: str, flask_host: str = '0.0.0.0', 
     bert_model = AutoModelForTokenClassification.from_pretrained(path_to_bert_model)
 
     questioner = ProductsExtractor(tokenizer, bert_model)
-    questioner.get_products('https://www.freedom.com.au/product/24334495')
 
     flask_app.add_url_rule("/get_products/<path:url>", "get_products", questioner.get_products)
-    flask_app.add_url_rule("/get_print/<text>", "get_print", questioner.get_print)
     Thread(target=flask_app.run, kwargs={"host": flask_host, "port": flask_port, "debug": False}).start()
 
 

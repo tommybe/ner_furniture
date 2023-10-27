@@ -25,9 +25,6 @@ class ProductsExtractor:
         logging.info(f'Products on {url} websites: {unique_entities}')
         return unique_entities
 
-    def get_print(self, text):
-        return text
-
     def _extract_entities(self, predictions):
         all_entities = []
         this_entity = []
